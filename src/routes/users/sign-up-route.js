@@ -1,4 +1,4 @@
-const qs = require('querystring');
+const qs = require("querystring");
 
 const saveUser = user => {
   // получить файл с юзером
@@ -9,21 +9,23 @@ const saveUser = user => {
 const signUpRoute = (request, response) => {
   // Взять данные что пришли
 
-  if (request.method === 'POST') {
-    let body = '';
+  if (request.method === "POST") {
+    let body = "";
 
-    request.on('data', function (data) {
+    request.on("data", function(data) {
       body = body + data;
 
-      console.log('Incoming data!!!!');
+      console.log("Incoming data!!!!");
     });
 
-    request.on('end', function () {
+    request.on("end", function() {
       const post = qs.parse(body);
       console.log(post);
     });
   }
 
+  response.writeHead(200);
+  response.end();
   // Взять username с данных, сохранить в переменную
 
   // Сохраняем данные в <username>.json

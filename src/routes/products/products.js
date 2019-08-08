@@ -1,17 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 
-const motocycleRoute = (request, response) => {
-  const filePath = path.join(
-    __dirname,
-    "../../../",
-    "assets",
-    "yamaha-v-star-1300-1.jpg"
-  );
+const products = (request, response) => {
+  const filePath = path.join(__dirname, "../../", "db", "all-products.json");
   const image = fs.statSync(filePath);
 
   response.writeHead(200, {
-    "Content-Type": "image/jpeg",
+    "Content-Type": "application/json",
     "Content-Length": image.size
   });
 
@@ -20,4 +15,4 @@ const motocycleRoute = (request, response) => {
   readStream.pipe(response);
 };
 
-module.exports = motocycleRoute;
+module.exports = products;
