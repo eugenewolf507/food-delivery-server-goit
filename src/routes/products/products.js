@@ -3,18 +3,17 @@ const path = require("path");
 const url = require("url");
 
 // required get and filter functions
-const { GETProductID, filterProductsByID } = require("./byID");
 const { GETIDSQueryArray, filterProductsByIDS } = require("./byIDS");
 const {
   GETCategoryQueryArray,
   filterProductsByCategories
 } = require("./byCategories");
-const getJsonStatus = require("./jsonStatus");
+const getJsonStatus = require("./productsJsonStatus");
 
 //++++++++ PRODUCTS +++++++++++
+
 const products = (request, response) => {
   const filePath = path.join(__dirname, "../../", "db", "all-products.json");
-  let parsedUrl = url.parse(request.url);
 
   //++++++++ readFile +++++++++++
   fs.readFile(filePath, function(err, data) {
@@ -24,21 +23,15 @@ const products = (request, response) => {
     const productsList = JSON.parse(data);
     let productsResponse = [];
 
-    //++++++++ byID +++++++++++
-    if (parsedUrl.query === null) {
-      const querryID = GETProductID(parsedUrl);
-      productsResponse = filterProductsByID(productsList, querryID);
-    }
-
     //++++++++ byIDs +++++++++++
-    if (parsedUrl.query !== null && parsedUrl.query.includes("ids")) {
-      const querryIDSArray = GETIDSQueryArray(parsedUrl);
+    if (request.query !== null && request.query.hasOwnProperty("ids")) {
+      const querryIDSArray = GETIDSQueryArray(request.query.ids);
       productsResponse = filterProductsByIDS(productsList, querryIDSArray);
     }
 
     //++++++++ byCategories +++++++++++
-    if (parsedUrl.query !== null && parsedUrl.query.includes("category")) {
-      const querryCategoryArray = GETCategoryQueryArray(parsedUrl);
+    if (request.query !== null && request.query.hasOwnProperty("category")) {
+      const querryCategoryArray = GETCategoryQueryArray(request.query.category);
       productsResponse = filterProductsByCategories(
         productsList,
         querryCategoryArray
@@ -46,7 +39,10 @@ const products = (request, response) => {
     }
 
     //++++++++ all +++++++++++
-    if (parsedUrl.path === "/products/") {
+    if (
+      request.path.includes("/products") &&
+      Object.entries(request.query).length === 0
+    ) {
       productsResponse = productsList;
     }
 

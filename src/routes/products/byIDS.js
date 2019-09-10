@@ -1,13 +1,12 @@
-const url = require("url");
 const services = {};
 
-services.GETIDSQueryArray = parsedUrl => {
-  if (parsedUrl.query !== null) {
-    const lastIndex = parsedUrl.query.lastIndexOf("=");
-    const IDSQueryArray = parsedUrl.query
-      .replace(/%27/g, "")
-      .replace(/%20/g, "")
-      .slice(lastIndex + 1)
+services.GETIDSQueryArray = query => {
+  if (query !== null) {
+    console.log("query !== null");
+    const IDSQueryArray = query
+      .replace(/\s/g, "")
+      .replace(/"/g, "")
+      .replace(/'/g, "")
       .split(",");
     return IDSQueryArray;
   }
