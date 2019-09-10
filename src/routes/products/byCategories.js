@@ -1,14 +1,13 @@
-const url = require("url");
 const services = {};
 
-services.GETCategoryQueryArray = parsedUrl => {
-  if (parsedUrl.query !== null) {
-    const lastIndex = parsedUrl.query.lastIndexOf("=");
-    const ProductsQueryArray = parsedUrl.query
-      .replace(/%27/g, "")
-      .replace(/%22/g, "")
-      .replace(/%20/g, "")
-      .slice(lastIndex + 1)
+//Make Array with cattegory names from query
+services.GETCategoryQueryArray = query => {
+  if (query !== null) {
+    console.log("query !== null");
+    const ProductsQueryArray = query
+      .replace(/\s/g, "")
+      .replace(/"/g, "")
+      .replace(/'/g, "")
       .split(",");
     return ProductsQueryArray;
   }
